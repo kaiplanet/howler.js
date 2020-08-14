@@ -589,6 +589,7 @@
         headers: o.xhr && o.xhr.headers ? o.xhr.headers : null,
         withCredentials: o.xhr && o.xhr.withCredentials ? o.xhr.withCredentials : false,
       };
+      self._crossOrigin = typeof o.crossOrigin === 'string' ? o.crossOrigin : false;
 
       // Setup all other default properties.
       self._duration = 0;
@@ -2233,6 +2234,10 @@
       } else if (!Howler.noAudio) {
         // Get an unlocked Audio object from the pool.
         self._node = Howler._obtainHtml5Audio();
+
+        if (typeof parent._crossOrigin === 'string') {
+            self._node.crossOrigin = parent._crossOrigin;
+        }
 
         // Listen for errors (http://dev.w3.org/html5/spec-author-view/spec.html#mediaerror).
         self._errorFn = self._errorListener.bind(self);
